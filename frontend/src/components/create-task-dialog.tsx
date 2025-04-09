@@ -23,6 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import {toast} from "sonner";
 
 
 interface Childrens{
@@ -49,13 +50,16 @@ export default function CreateTaskDialog({ open, onOpenChange, onSave, editTask 
     const[children,setChildren] = useState<Childrens[] | null>([]);
 
     const [task, setTask] = useState<Task>({
+        id : "",
         name: "",
         description: "",
         dueDate: new Date(Date.now() + 86400000 * 7), // Default to 7 days from now
         xpReward: 50,
-        status: "pending",
+        status: "PENDING",
         assigneeId: ""
     })
+
+
 
     useEffect(() => {
         if (editTask) {
@@ -67,14 +71,13 @@ export default function CreateTaskDialog({ open, onOpenChange, onSave, editTask 
                 description: "",
                 dueDate: new Date(Date.now() + 86400000 * 7),
                 xpReward: 50,
-                status: "pending",
+                status: "PENDING",
                 assigneeId: ""
             })
         }
     }, [editTask, open])
 
 
-    console.log(task)
 
 
     useEffect(() => {
@@ -110,18 +113,59 @@ export default function CreateTaskDialog({ open, onOpenChange, onSave, editTask 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/tasks`,task,{
-                headers : {
-                    Authorization: `Bearer ${userData?.token}`,
+       async function editTaskSubmit(){
+           const {
+               name,
+               description,
+               dueDate,
+               xpReward,
+               status,
+               assigneeId
+           } = task;
+            try {
+                const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/v1/tasks/${task.id}`,
+                    {
+                        name,
+                        description,
+                        dueDate,
+                        xpReward,
+                        status,
+                        assigneeId
+                    }
+                    ,{
+                    headers : {
+                        Authorization: `Bearer ${userData?.token}`,
+                    }
+                })
+                if(response.status === 200) {
+                    toast("Successfully updated task")
                 }
-            })
-            if(response.status === 200) {
-                console.log("created",response)
+            }catch (e) {
+                console.error(e)
             }
-        }catch (error){
-
         }
+
+        async function createTaskSubmit(){
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/tasks`,task,{
+                    headers : {
+                        Authorization: `Bearer ${userData?.token}`,
+                    }
+                })
+                if(response.status === 200) {
+                    console.log("created",response)
+                }
+            }catch (error){
+
+            }
+        }
+
+        if(editTask) {
+            editTaskSubmit()
+        }else {
+            createTaskSubmit()
+        }
+
         onSave(task)
     }
 
@@ -165,7 +209,7 @@ export default function CreateTaskDialog({ open, onOpenChange, onSave, editTask 
                                     id="dueDate"
                                     name="dueDate"
                                     type="date"
-                                    value={task.dueDate.toISOString().split("T")[0]}
+                                    value={task.dueDate?.toISOString().split("T")[0]}
                                     onChange={handleDateChange}
                                     required
                                 />

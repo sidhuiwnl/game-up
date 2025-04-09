@@ -14,6 +14,7 @@ export interface UpdateTaskDto {
     dueDate?: Date;
     xpReward?: number;
     status?: TaskStatus;
+    assigneeId?: string;
 }
 
 export interface CreateSubmissionDto {

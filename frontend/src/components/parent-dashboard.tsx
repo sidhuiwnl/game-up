@@ -1,32 +1,35 @@
-"use client"
 
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import TaskList from "@/components/task-list"
 import CreateTaskDialog from "@/components/create-task-dialog"
 import type { Task } from "@/lib/types"
+import axios from "axios";
+import {useUser} from "@/context/UserContext.tsx";
+import {toast} from "sonner";
 
 export default function     ParentDashboard() {
-    const [tasks, setTasks] = useState<Task[]>([
-        {
-            id: "1",
-            name: "Read a book",
-            description: "Read at least 20 pages of your favorite book",
-            dueDate: new Date(Date.now() + 86400000 * 3), // 3 days from now
-            xpReward: 50,
-            status: "pending",
-        },
-        {
-            id: "2",
-            name: "Practice math",
-            description: "Complete the math worksheet",
-            dueDate: new Date(Date.now() + 86400000 * 2), // 2 days from now
-            xpReward: 75,
-            status: "submitted",
-        },
-    ])
+    const { userData } = useUser()
+    const [tasks, setTasks] = useState<Task[]>([])
+
+    useEffect(() => {
+        async function getAllTasks(){
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/tasks`,{
+                    headers : {
+                        Authorization: `Bearer ${userData?.token}`
+                    }
+                })
+
+                setTasks(response.data.tasks)
+            }catch (error){
+                console.log(error)
+            }
+        }
+        getAllTasks()
+    }, []);
 
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
     const [editingTask, setEditingTask] = useState<Task | null>(null)
@@ -42,16 +45,30 @@ export default function     ParentDashboard() {
     }
 
     const handleEditTask = (task: Task) => {
-        setEditingTask(task)
+        setEditingTask({
+            ...task,
+            dueDate : new Date(task.dueDate!),
+        })
         setIsCreateDialogOpen(true)
     }
 
-    const handleDeleteTask = (taskId: string) => {
+    const handleDeleteTask = async (taskId: string) => {
         setTasks(tasks.filter((task) => task.id !== taskId))
+
+        try {
+            await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/tasks/${taskId}`,{
+                headers : {
+                    Authorization: `Bearer ${userData?.token}`
+                }
+            })
+            toast.success("Task deleted")
+        }catch (error){
+            console.log(error)
+        }
     }
 
     const handleReviewTask = (taskId: string) => {
-        setTasks(tasks.map((task) => (task.id === taskId ? { ...task, status: "reviewed" } : task)))
+        setTasks(tasks.map((task) => (task.id === taskId ? { ...task, status: "REVIEWED" } : task)))
     }
 
     return (
