@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String
+  role          Role     @default(CHILD)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  parentId      String?
+  parent        User?    @relation("ParentChildren", fields: [parentId], references: [id])
+  children      User[]   @relation("ParentChildren")
+  tasksCreated  Task[]   @relation("TaskCreator")
+  tasksAssigned Task[]   @relation("TaskAssignee")
+}
+
+model Task {
+  id          String      @id @default(uuid())
+  name        String
+  description String
+  dueDate     DateTime
+  xpReward    Int
+  status      TaskStatus  @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  creatorId   String
+  assigneeId  String
+  creator     User        @relation("TaskCreator", fields: [creatorId], references: [id])
+  assignee    User        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  submission  Submission?
+}
+
+model Submission {
+  id        String   @id @default(uuid())
+  content   String?
+  fileUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  taskId    String   @unique
+  task      Task     @relation(fields: [taskId], references: [id])
+}
+
+enum Role {
+  PARENT
+  CHILD
+}
+
+enum TaskStatus {
+  PENDING
+  SUBMITTED
+  REVIEWED
+}
