@@ -9,7 +9,7 @@ export class AuthController {
             const userData: RegisterDto = req.body;
             const user = await authService.register(userData);
 
-            res.status(201).json({
+            res.status(200).json({
                 message: 'User registered successfully',
                 user
             });
