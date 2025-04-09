@@ -8,7 +8,7 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
         const token = req.headers.authorization?.split(' ')[1];
 
-        console.log("token", token);
+
 
         if (!token) {
              res.status(401).json({
@@ -19,6 +19,8 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
+
+        console.log("decoded",decoded);
         req.user = decoded;
 
         console.log("current user",req.user.userId);

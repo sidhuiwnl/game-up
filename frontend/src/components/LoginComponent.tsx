@@ -70,10 +70,14 @@ export default function LoginComponent() {
                 const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/auth/login`, formData)
 
                 if (response.status === 200) {
+                    localStorage.setItem("session",JSON.stringify({
+                        token: response.data.token,
+                        user : response.data.user,
+                    }))
                     toast("Login successful!", {
                         description: "Welcome back! Redirecting...",
                     })
-                    navigate("/dashboard") // or wherever you want to go
+                    navigate("/") // or wherever you want to go
                 } else {
                     toast("Login failed!", {
                         description: "Check your credentials and try again.",
