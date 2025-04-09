@@ -1,4 +1,4 @@
-import type {Task,Submission,TaskStatus} from "@prisma/client";
+import type {Task} from "@prisma/client";
 import {prisma} from "./prisma.service.ts";
 import {AppError} from "../middleware/errorHandler.ts";
 import type {CreateTaskDto,UpdateTaskDto,CreateSubmissionDto} from "../types/task.types.ts";
@@ -6,8 +6,8 @@ import type {CreateTaskDto,UpdateTaskDto,CreateSubmissionDto} from "../types/tas
 export class TaskService {
     async createTask(creatorId: string, taskData: CreateTaskDto): Promise<Task> {
 
-        const creator = await prisma.user.findUnique({
-            where: { id: creatorId }
+        const creator = await prisma.user.findFirst({
+            where: {  id : creatorId }
         });
 
         if (!creator || creator.role !== 'PARENT') {
@@ -15,7 +15,7 @@ export class TaskService {
         }
 
 
-        const assignee = await prisma.user.findUnique({
+        const assignee = await prisma.user.findFirst({
             where: {
                 id: taskData.assigneeId,
                 parentId: creatorId
@@ -34,7 +34,8 @@ export class TaskService {
                 dueDate: new Date(taskData.dueDate),
                 xpReward: taskData.xpReward,
                 creatorId,
-                assigneeId: taskData.assigneeId
+                assigneeId: taskData.assigneeId,
+
             }
         });
     }

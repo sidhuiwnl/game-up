@@ -3,38 +3,48 @@ import type {Role} from "@prisma/client";
 import type {AuthRequest,TokenPayload} from "../types/auth.types.ts";
 import jwt from "jsonwebtoken";
 
-export const audenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
-        if(!token){
-            return res.status(401).send("No token provided");
+
+        const token = req.headers.authorization?.split(' ')[1];
+
+        console.log("token", token);
+
+        if (!token) {
+             res.status(401).json({
+                message: 'Authentication required'
+            });
+             return ;
         }
 
-        const decoded = jwt.verify(token,process.env.JWT_SECRET as string) as TokenPayload;
-        //@ts-ignore
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as TokenPayload;
         req.user = decoded;
+
+        console.log("current user",req.user.userId);
         next();
-
-
-    }catch {
-        return res.status(401).json({
+    } catch (error) {
+        res.status(401).json({
             message: 'Invalid or expired token'
         });
+        return;
     }
-}
+};
 
 export const authorize = (roles : Role[]) =>{
     return (req: AuthRequest, res: Response, next: NextFunction) => {
         if(!req.user){
-            return res.status(401).json({
+             res.status(401).json({
                 message : "Authentication required"
             });
+            return;
         }
 
         if(!roles.includes(req.user.role)){
-            return res.status(403).json({
+             res.status(403).json({
                 message: 'Access denied. Insufficient permissions'
             });
+            return;
         }
         next();
     }
