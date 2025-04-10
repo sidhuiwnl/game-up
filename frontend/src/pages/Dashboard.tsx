@@ -1,11 +1,16 @@
 import ParentDashboard from "@/components/parent-dashboard"
 import ChildDashboard from "@/components/child-dashboard"
 import {useUser} from "@/context/UserContext.tsx";
+import {Navigate} from "react-router";
 
 export default function Dashboard() {
     const { userData } = useUser();
 
+    if (userData === null) {
+        return <Navigate to="/register" replace />;
+    }
 
+    console.log(userData);
 
     return (
 
