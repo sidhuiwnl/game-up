@@ -2,8 +2,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
 import type {User} from "@prisma/client";
 import type {TokenPayload,LoginDto,RegisterDto} from "../types/auth.types.ts";
-import {AppError} from "../middleware/errorHandler.ts";
-import {prisma} from "./prisma.service.ts";
+import {AppError} from "../middleware/errorHandler";
+import {prisma} from "./prisma.service";
 
 export class AuthService {
     async register(userData : RegisterDto) : Promise<User>{
@@ -14,7 +14,7 @@ export class AuthService {
         })
 
         if(existingUser){
-           throw new AppError("Email aldready in use",400)
+            throw new AppError("Email aldready in use",400)
         }
 
         if(userData.role === "CHILD" && userData.parentId){

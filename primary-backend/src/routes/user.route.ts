@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {userController} from "../controller/user.controller.ts";
-import {authenticate, authorize} from "../middleware/middleware.ts";
+import {userController} from "../controller/user.controller";
+import {authorize,authenticate} from "../middleware/middleware";
 
 const router = Router();
 
@@ -11,4 +11,3 @@ router.get("/children",authorize(["PARENT"]),userController.getChildren);
 router.get("/parent",authorize(["CHILD"]),userController.getParent);
 
 export default router;
-

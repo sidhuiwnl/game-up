@@ -1,6 +1,6 @@
 import {Router} from "express";
-import {taskController} from "../controller/task.controller.ts";
-import {authorize,authenticate} from "../middleware/middleware.ts";
+import {taskController} from "../controller/task.controller";
+import {authenticate,authorize} from "../middleware/middleware";
 import express from "express";
 
 

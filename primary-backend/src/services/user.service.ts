@@ -1,6 +1,6 @@
 import type {User} from "@prisma/client";
-import {prisma} from "./prisma.service.ts";
-import {AppError} from "../middleware/errorHandler.ts";
+import {prisma} from "./prisma.service";
+import {AppError} from "../middleware/errorHandler";
 
 export class UserService {
     async getUserById(userId: string): Promise<Omit<User, 'password'>> {

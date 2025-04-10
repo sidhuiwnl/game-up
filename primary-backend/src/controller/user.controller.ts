@@ -1,7 +1,7 @@
 
 import type { Response, NextFunction } from 'express';
 import type {AuthRequest} from "../types/auth.types.ts";
-import { userService } from '../services/user.service';
+import {userService} from "../services/user.service";
 import { AppError } from '../middleware/errorHandler';
 
 export class UserController {

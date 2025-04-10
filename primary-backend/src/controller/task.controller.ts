@@ -1,7 +1,7 @@
 
 import type { Request, Response, NextFunction } from 'express';
 import type {AuthRequest} from "../types/auth.types.ts";
-import {taskService} from "../services/task.service.ts";
+import {taskService} from "../services/task.service";
 import type {CreateTaskDto,UpdateTaskDto,CreateSubmissionDto} from "../types/task.types.ts";
 import { AppError } from '../middleware/errorHandler';
 

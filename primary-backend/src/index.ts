@@ -1,7 +1,7 @@
 
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client"
-import app from "./app.ts";
+import app from "./app";
 
 const prisma = new PrismaClient();
 

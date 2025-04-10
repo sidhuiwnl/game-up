@@ -1,6 +1,6 @@
 import type {Task} from "@prisma/client";
-import {prisma} from "./prisma.service.ts";
-import {AppError} from "../middleware/errorHandler.ts";
+import {prisma} from "./prisma.service";
+import {AppError} from "../middleware/errorHandler";
 import type {CreateTaskDto,UpdateTaskDto,CreateSubmissionDto} from "../types/task.types.ts";
 
 export class TaskService {

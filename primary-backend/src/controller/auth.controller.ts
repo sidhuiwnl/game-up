@@ -1,5 +1,5 @@
 import type {Request,Response,NextFunction} from "express";
-import {authService} from "../services/auth.service.ts";
+import {authService} from "../services/auth.service";
 import type {LoginDto,RegisterDto} from "../types/auth.types.ts";
 
 
