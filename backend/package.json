@@ -6,6 +6,9 @@
     "@types/bun": "latest",
     "prisma": "^5.19.1"
   },
+  "scripts": {
+    "dev"  : "bun src/index.ts"
+  },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
