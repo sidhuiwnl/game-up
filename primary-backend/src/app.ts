@@ -8,9 +8,7 @@ import userRoutes from "./routes/user.route"
 const app = express();
 
 
-app.use(cors({
-    origin: "https://game-up-dusky.vercel.app",
-}))
+app.use(cors())
 
 
 

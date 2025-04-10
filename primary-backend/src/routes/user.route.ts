@@ -1,8 +1,16 @@
-import {Router} from "express";
+import express, {Router} from "express";
 import {userController} from "../controller/user.controller";
 import {authorize,authenticate} from "../middleware/middleware";
 
 const router = Router();
+
+router.use((req, res, next) => {
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+        express.json()(req, res, next);
+    } else {
+        next();
+    }
+});
 
 router.use(authenticate)
 
