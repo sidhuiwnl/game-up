@@ -1,12 +1,20 @@
 import {Router} from "express";
 import {taskController} from "../controller/task.controller.ts";
 import {authorize,authenticate} from "../middleware/middleware.ts";
-
+import express from "express";
 
 
 const router = Router();
 
 router.use(authenticate)
+
+router.use((req, res, next) => {
+    if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+        express.json()(req, res, next);
+    } else {
+        next();
+    }
+});
 
 // Get all tasks (different behavior for parent/child)
 router.get('/', taskController.getTasks);

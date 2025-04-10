@@ -19,6 +19,8 @@ import type { Task } from "@/lib/types"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, CheckCircle, FileText } from "lucide-react"
 
+
+
 interface SubmitTaskDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
@@ -27,9 +29,13 @@ interface SubmitTaskDialogProps {
 }
 
 export default function SubmitTaskDialog({ open, onOpenChange, onSubmit, task }: SubmitTaskDialogProps) {
+
     const [submissionType, setSubmissionType] = useState<string>("text")
     const [textSubmission, setTextSubmission] = useState<string>("")
     const [fileSubmission, setFileSubmission] = useState<File | null>(null)
+
+
+    console.log(submissionType)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -38,8 +44,8 @@ export default function SubmitTaskDialog({ open, onOpenChange, onSubmit, task }:
             onSubmit("text", textSubmission)
         } else if (submissionType === "file" && fileSubmission) {
             onSubmit("file", fileSubmission.name)
-        } else if (submissionType === "complete") {
-            onSubmit("complete", "Task marked as complete")
+        } else if (submissionType === "COMPLETED") {
+            onSubmit("COMPLETED", "Task marked as complete")
         }
     }
 
@@ -48,6 +54,8 @@ export default function SubmitTaskDialog({ open, onOpenChange, onSubmit, task }:
             setFileSubmission(e.target.files[0])
         }
     }
+
+
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,7 +75,7 @@ export default function SubmitTaskDialog({ open, onOpenChange, onSubmit, task }:
                                 <TabsTrigger value="file">
                                     <Upload className="h-4 w-4 mr-2" /> File
                                 </TabsTrigger>
-                                <TabsTrigger value="complete">
+                                <TabsTrigger value="COMPLETED">
                                     <CheckCircle className="h-4 w-4 mr-2" /> Complete
                                 </TabsTrigger>
                             </TabsList>
@@ -101,7 +109,7 @@ export default function SubmitTaskDialog({ open, onOpenChange, onSubmit, task }:
                                 </div>
                             </TabsContent>
 
-                            <TabsContent value="complete" className="space-y-4">
+                            <TabsContent value="COMPLETED" className="space-y-4">
                                 <div className="text-center py-6">
                                     <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-2" />
                                     <p>Mark this task as complete without additional details.</p>

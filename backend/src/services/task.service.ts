@@ -162,6 +162,20 @@ export class TaskService {
             throw new AppError('This task has already been submitted', 400);
         }
 
+        if(submissionData.completed === "COMPLETED") {
+            await prisma.task.update({
+                where : {
+                    id : taskId
+                },
+                data: {
+                    status : "SUBMITTED"
+                },
+                include: {
+                    submission: true
+                }
+            })
+        }
+
 
         await prisma.submission.create({
             data: {
@@ -170,6 +184,8 @@ export class TaskService {
                 taskId
             }
         });
+
+
 
         return prisma.task.update({
             where: {id: taskId},

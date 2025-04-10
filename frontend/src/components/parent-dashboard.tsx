@@ -24,6 +24,8 @@ export default function     ParentDashboard() {
                 })
 
                 setTasks(response.data.tasks)
+
+
             }catch (error){
                 console.log(error)
             }
@@ -51,6 +53,8 @@ export default function     ParentDashboard() {
         })
         setIsCreateDialogOpen(true)
     }
+
+    console.log(tasks)
 
     const handleDeleteTask = async (taskId: string) => {
         setTasks(tasks.filter((task) => task.id !== taskId))

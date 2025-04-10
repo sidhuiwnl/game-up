@@ -134,7 +134,7 @@ export default function CreateTaskDialog({ open, onOpenChange, onSave, editTask 
                     }
                     ,{
                     headers : {
-                        Authorization: `Bearer ${userData?.token}`,
+                        Authorization: `Bearer ${userData?.token}`
                     }
                 })
                 if(response.status === 200) {

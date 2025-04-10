@@ -56,7 +56,7 @@ export default function TaskList({ tasks, onEdit, onDelete, onReview, onSubmit, 
                                     <div>{task.name}</div>
                                     <div className="text-sm text-muted-foreground line-clamp-1">{task.description}</div>
                                 </TableCell>
-                                <TableCell>{formatDistanceToNow(task.dueDate, { addSuffix: true })}</TableCell>
+                                <TableCell>{formatDistanceToNow(task.dueDate!, { addSuffix: true })}</TableCell>
                                 <TableCell>{task.xpReward} XP</TableCell>
                                 <TableCell>{getStatusBadge(task.status)}</TableCell>
                                 <TableCell className="text-right">
@@ -65,19 +65,19 @@ export default function TaskList({ tasks, onEdit, onDelete, onReview, onSubmit, 
                                             <Button variant="ghost" size="icon" onClick={() => onEdit?.(task)}>
                                                 <Edit className="h-4 w-4" />
                                             </Button>
-                                            <Button variant="ghost" size="icon" onClick={() => onDelete?.(task.id)}>
+                                            <Button variant="ghost" size="icon" onClick={() => onDelete?.(task.id!)}>
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
-                                            {task.status === "submitted" && (
-                                                <Button variant="ghost" size="icon" onClick={() => onReview?.(task.id)}>
+                                            {task.status === "SUBMITTED" && (
+                                                <Button variant="ghost" size="icon" onClick={() => onReview?.(task.id!)}>
                                                     <CheckCircle className="h-4 w-4" />
                                                 </Button>
                                             )}
                                         </div>
                                     ) : (
                                         <div>
-                                            {task.status === "pending" && (
-                                                <Button variant="outline" size="sm" onClick={() => onSubmit?.(task.id)}>
+                                            {task.status === "PENDING" && (
+                                                <Button variant="outline" size="sm" onClick={() => onSubmit?.(task.id!)}>
                                                     <Upload className="h-4 w-4 mr-2" /> Submit
                                                 </Button>
                                             )}

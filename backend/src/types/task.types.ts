@@ -20,4 +20,5 @@ export interface UpdateTaskDto {
 export interface CreateSubmissionDto {
     content?: string;
     fileUrl?: string;
+    completed? : "COMPLETED";
 }
