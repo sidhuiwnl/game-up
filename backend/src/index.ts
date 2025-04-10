@@ -7,14 +7,14 @@ const prisma = new PrismaClient();
 
 dotenv.config();
 
-
+const PORT = process.env.PORT || 3000;
 
 
 
 async function startServer() {
     try {
         await prisma.$connect()
-        app.listen(3000,() =>{
+        app.listen(PORT,() =>{
             console.log("Server started on 3000");
         });
     }catch (error) {
